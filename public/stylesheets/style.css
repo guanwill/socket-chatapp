@@ -1,0 +1,72 @@
+#chat {
+  height: 600px;
+  /*overflow: scroll;*/
+  display: block;
+  text-align: center;
+  margin: 0 auto;
+  background: grey;
+  color: white;
+}
+
+#chatWrap {
+  /*float: left;*/
+  display: block;
+  text-align: center;
+  margin: 0 auto;
+  width: 40%;
+  border-radius: 8px;
+  border: 4px solid rgb(15, 10, 52);
+}
+
+#contentWrap {
+  display: none;
+}
+
+.error {
+  color:red;
+}
+.whisper {
+  color: grey;
+  font-style: italic;
+}
+
+#nickWrap {
+  display: block;
+  margin: 0 auto;
+  text-align: center;
+  position: relative;
+  top: 200px;
+}
+
+#login-heading {
+  font-size: 50px;
+  margin-bottom: 80px;
+}
+.submit-name {
+  margin-top: 17px;
+  margin-top: 5px;
+}
+
+.msg-field{
+  padding: 7px;
+  width: 80%;
+  margin-bottom: 5px;
+  border-radius: 10px;
+  margin-top: 5px;
+}
+
+#users {
+  float: left;
+  height: 600px;
+  background: black;
+  padding: 10px;
+  border-right: 4px solid rgb(15, 10, 52);
+  color: white;
+}
+
+.welcome-h1 {
+  display: block;
+  text-align: center;
+  margin: 30px;
+  color: rgb(15, 10, 52);
+}

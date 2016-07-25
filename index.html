@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Will Chat</title>
+    <script   src="https://code.jquery.com/jquery-3.1.0.js"   integrity="sha256-slogkvB1K3VOkzAI8QITxV3VzpOnkeNVsKvtkYLMjfk="   crossorigin="anonymous"></script>
+    <script src="/socket.io/socket.io.js" charset="utf-8"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="stylesheets/style.css">
+  </head>
+  <body>
+
+
+    <div id="welcome"></div>
+
+    <div id="nickWrap">
+      <h1 id="login-heading">Will_Chat</h1>
+      <p>What is your name?</p>
+      <p id="nickError"></p>
+      <form id="setNick">
+        <input size="35" id="nickname"></input> </br>
+        <input class="btn btn-primary submit-name" type="submit"></input>
+      </form>
+    </div>
+
+    <div id="contentWrap">
+      <div id="chatWrap">
+        <div id="users"></div>
+
+        <div id="chat"></div>
+        <form id="send-message">
+          <input class="msg-field" size="35" id="message"></input>
+          <input class="btn btn-primary" type="submit"></input>
+        </form>
+      </div>
+
+    </div>
+
+
+    <script>
+      $(function(){
+        var socket = io.connect();
+        var $messageForm = $('#send-message');
+        var $messageBox = $('#message');
+        var $chat = $('#chat');
+        var $nickForm = $('#setNick');
+        var $nickError = $('#nickError');
+        var $nickBox = $('#nickname');
+        var $users = $('#users');
+
+        $nickForm.submit(function(e){
+          e.preventDefault();
+          var socketname = $nickBox.val();
+          var $h1 = $('<h1>').addClass('welcome-h1').text('Welcome, ' + socketname);
+          $('#welcome').append($h1);
+
+          //-----NEW USER EVENT-----
+          socket.emit('new user', $nickBox.val(), function(data){ //first parameter- name of event, second parameter-thing you want to send to server as data, third parameter- is a callback that validates whether user is valid or not. this validation is done on serverside in app.js
+            if(data){ //if data, which is if nickname exists, hide the login form and show chat box
+              $('#nickWrap').hide();
+              $('#contentWrap').show();
+            }
+            else {  //else, just display an error message
+              $nickError.html('That username is already taken. Try Again.');
+            }
+          });
+          $nickBox.val('');
+        })
+
+        socket.on('usernames', function(data){
+          var names = '';
+          for (var i=0; i<data.length; i++){
+            names += data[i] + "<br/>";
+          }
+          $users.html(names);
+        })
+
+        //-----NEW MESSAGE EVENT-----
+        //when user submits a message, send this action to the server
+        $messageForm.submit(function(e){
+          e.preventDefault(); //we dont want the submit button to submit and refresh the page.
+          socket.emit('send message', $messageBox.val(), function(data){
+            $chat.append('<span class="error"><b>' + data + "</span><br/>"); //display the message we received from the server to everyone
+          }); //2 parameters, 1 = name the action whatever you want, 2 = the message/thing you want to send to the server. we are getting the msg with .val from messagebox form. from the backend, this 'thing' will become 'data'.
+          $messageBox.val(''); //clear the messagebox after it sends the message to the server. next go back to app.js and receive these information from the server
+        })
+
+        //receiving response from the server after sending what we have sent above through the submit form
+        socket.on('new message', function(data){
+          $chat.append('<span class="msg"><b>' + data.nick + ': </b>' + data.msg + "</span><br/>"); //display the message we received from the server to everyone
+        })
+
+        //-----WHISPERING EVENT-----
+        socket.on('whisper', function(data){
+          $chat.append('<span class="whisper"><b>' + data.nick + ': </b>' + data.msg + "</span><br/>"); //display the message we received from the server to everyone
+        })
+
+      })
+    </script>
+  </body>
+</html>
