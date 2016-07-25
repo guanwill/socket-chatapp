@@ -6,7 +6,7 @@
 4. Visit localhost:3000
 
 ##Tech Used
-* Wanted to try socket.io
+* Wanted to try socket.io. Followed [this](https://www.youtube.com/watch?v=pNKNYLv2BpQ) tutorial
 * Node/Express JS
 * Javascript
 * jQuery
