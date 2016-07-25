@@ -1,5 +1,11 @@
 #Simple Realtime Chat App
 
-* To use it, git clone
-* To play around with socket.io
-*
+1. To use it, git clone https://github.com/guanwill/socket-chatapp.git
+2. Npm install
+3. Node app.js
+
+##Tech Used
+* Wanted to try socket.io
+* Node/Express JS
+* Javascript
+* jQuery
